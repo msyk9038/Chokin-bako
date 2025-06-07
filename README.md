@@ -1,31 +1,101 @@
+# 貯金箱 (micro:bit)
 
-> Open this page at [https://msykmyt.github.io/chokin-bako/](https://msykmyt.github.io/chokin-bako/)
+このプロジェクトは、BBC micro:bitを使用した電子貯金箱を実装したものです。
 
-## Use as Extension
+## 概要
 
-This repository can be added as an **extension** in MakeCode.
+micro:bitとセンサーを組み合わせて、コインを投入するとカウントする電子貯金箱です。投入したコインの枚数をLEDディスプレイに表示し、貯金の状況を視覚的に確認できます。
 
-* open [https://makecode.microbit.org/](https://makecode.microbit.org/)
-* click on **New Project**
-* click on **Extensions** under the gearwheel menu
-* search for **https://github.com/msykmyt/chokin-bako** and import
+## 機能
 
-## Edit this project ![Build status badge](https://github.com/msykmyt/chokin-bako/workflows/MakeCode/badge.svg)
+- コイン投入の検出とカウント
+- 投入枚数のリアルタイム表示
+- カウントのリセット機能
+- 投入時の効果音（オプション）
 
-To edit this repository in MakeCode.
+## 使用方法
 
-* open [https://makecode.microbit.org/](https://makecode.microbit.org/)
-* click on **Import** then click on **Import URL**
-* paste **https://github.com/msykmyt/chokin-bako** and click import
+1. [MakeCode エディタ](https://makecode.microbit.org/)を開く
+2. 「読み込む」をクリックし、このリポジトリからダウンロードした .hex ファイルを選択
+3. または、「インポート」→「URLから読み込む」を選択し、このリポジトリのURLを入力
+4. micro:bitにダウンロードして使用
+5. センサーを接続し、貯金箱として使用開始
 
-## Blocks preview
+## ハードウェア要件
 
-This image shows the blocks code from the last commit in master.
-This image may take a few minutes to refresh.
+- BBC micro:bit
+- コイン検出センサー（光センサーまたはマイクロスイッチ）
+- ジャンパーワイヤー
+- 電源（電池ボックスまたはUSB電源）
+- 貯金箱の外装（自作または既存の箱を改造）
 
-![A rendered view of the blocks](https://github.com/msykmyt/chokin-bako/raw/master/.github/makecode/blocks.png)
+## 配線方法
 
-#### Metadata (used for search, rendering)
+```
+micro:bit Pin 1 --- センサー信号線
+micro:bit 3V ----- センサー電源線
+micro:bit GND ---- センサーGND線
+```
 
-* for PXT/microbit
-<script src="https://makecode.com/gh-pages-embed.js"></script><script>makeCodeRender("{{ site.makecode.home_url }}", "{{ site.github.owner_name }}/{{ site.github.repository_name }}");</script>
+## 操作方法
+
+- コインを投入: センサーがコインを検出し、カウントが1増加
+- Aボタン: カウントをリセット（0に戻す）
+- Bボタン: 現在のカウントを表示（省電力モード使用時）
+
+## コードの説明
+
+```typescript
+let コインの枚数 = 0
+コインの枚数 = 0
+basic.showNumber(コインの枚数)
+
+// Aボタンでカウントリセット
+input.onButtonPressed(Button.A, function () {
+    コインの枚数 = 0
+    basic.showNumber(コインの枚数)
+})
+
+// センサーからの入力を常に監視
+basic.forever(function () {
+    if (pins.digitalReadPin(DigitalPin.P1) == 0) {
+        コインの枚数 += 1
+        basic.showNumber(コインの枚数)
+    }
+})
+```
+
+## カスタマイズ
+
+コード内の以下の部分を編集することで、動作をカスタマイズできます：
+
+- センサーのピン番号（デフォルトはP1）
+- 検出条件（センサーの種類によって変更が必要）
+- 効果音の追加
+- 複数種類のコインの区別（追加センサーが必要）
+
+## 拡張アイデア
+
+- 金額計算機能の追加（コインの種類を区別）
+- 貯金目標の設定と達成度表示
+- データロギングによる貯金履歴の記録
+- 無線通信による複数の貯金箱の連携
+- スマートフォンアプリとの連携
+
+## 教育的価値
+
+このプロジェクトは以下のような学習要素を含んでいます：
+
+- センサーの使用と信号処理
+- 変数とカウンター
+- 条件分岐
+- 入出力の制御
+- 物理的なプロジェクトの設計と製作
+
+## ライセンス
+
+MIT
+
+## 作者
+
+msyk9038
